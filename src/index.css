@@ -1,0 +1,161 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-image: linear-gradient(to left, #66ccff, #fff5e6)
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.container {
+  display: block;
+  position: relative;
+  cursor: pointer;
+  font-size: 22px;
+  margin-right: 21px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  float: left;
+}
+
+.container input {
+  position: relative;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.containerShape {
+  display: block;
+  position: relative;
+  cursor: pointer;
+  font-size: 22px;
+  margin-right: 48px;
+  margin-bottom: 30px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  float: left;
+}
+.containerShape input {
+  position: relative;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border: 2px solid white;
+  border-bottom: 0px;
+}
+
+.CircleFilled {
+  background-image: url("./img/Circle-icon.png");
+}
+.Circle {
+  background-image: url("./img/Empty-circle.png");
+}
+.Text {
+  background-image: url("./img/Editing-Text-icon.png");
+}
+.Pen {
+  background-image: url("./img/Pencil-icon.png");
+}
+.Line {
+  background-image: url("./img/Editing-Line-icon.png");
+}
+.FilledSquare {
+  background-image: url("./img/Square-icon.png");
+}
+.Square {
+  background-image: url("./img/Empty-square.png");
+}
+.CustomRect {
+  background-image: url("./img/Editing-Rectangle-icon.png"); 
+}
+.FilledCustomRect {
+  background-image: url("./img/Rectangle-tool-icon.png");
+}
+.FillColor {
+  background-image: url("./img/paint-fill-icon.png"); 
+}
+.Move { 
+  background-image: url("./img/Actions-transform-move-icon.png");
+}
+
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+.container input:checked ~ .checkmark {
+  border: 2px solid black;
+}
+
+#myCanvas {
+  background-color: white;
+  float: left;
+  position: absolute;
+  border: '1px solid #000000';
+  margin-left: 177px;
+}
+#myCanvas2 {
+  background-color: none;
+  float: left;
+  position: absolute;
+  border: '1px solid #000000';
+  margin-left: 177px;
+}
+.shapeBoxStyle {
+  border: 1px solid black;
+  height: 600px;
+  width: 170px;
+  font: bold;
+  font-size: 20px;
+  font-style: oblique;
+  float: left;
+  position: relative;
+  padding-left: 5px;
+}
+.tools {
+  height: 250px;
+  width: 168px;
+  position: relative;
+}
+
+.colorBoxStyle {
+  border: 1px solid black;
+  height: 358px;
+  width: 174px;
+  background-color: white;
+  position: relative;
+}
+.containerShape input:checked ~ #shape{
+  border: 2px solid gray;
+}
+#shape {
+  float: left;
+  background-color: white;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 48px;
+  width: 48px;
+  border: 2px solid rgba(219, 219, 219, 0.87); 
+}
