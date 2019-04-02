@@ -5,7 +5,7 @@ body {
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+
   background-image: linear-gradient(to left, #66ccff, #fff5e6)
 }
 
@@ -27,12 +27,13 @@ code {
   float: left;
 }
 
+
 .container input {
   position: relative;
   opacity: 0;
   cursor: pointer;
-  height: 0;
-  width: 0;
+  height: 0px;
+  width: 0px;
 }
 .containerShape {
   display: block;
@@ -47,23 +48,31 @@ code {
   user-select: none;
   float: left;
 }
+@-moz-document url-prefix() {
+  .container {
+      margin-right: 8px;
+  }
+  .containerShape {
+    margin-right: 35px;
+  }
+}
 .containerShape input {
   position: relative;
   opacity: 0;
   cursor: pointer;
-  height: 0;
-  width: 0;
+  height: 0px;
+  width: 0px;
 }
 
 .checkmark {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 0px;
+  left: 0px;
   height: 25px;
   width: 25px;
   background-color: #eee;
   border: 2px solid white;
-  border-bottom: 0px;
+  border-bottom: 8px;
 }
 
 .CircleFilled {
@@ -130,7 +139,7 @@ code {
   font-size: 20px;
   font-style: oblique;
   float: left;
-  position: relative;
+  position: absolute;
   padding-left: 5px;
 }
 .tools {
@@ -153,8 +162,8 @@ code {
   float: left;
   background-color: white;
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 0px;
+  left: 0px;
   height: 48px;
   width: 48px;
   border: 2px solid rgba(219, 219, 219, 0.87); 

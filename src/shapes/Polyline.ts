@@ -24,6 +24,7 @@ class Polyline implements Shape {
         ctx.lineWidth = this.shapeData.lineWidth
         ctx.beginPath()
         ctx.setLineDash([]);
+        ctx.lineJoin = 'round';
         ctx.moveTo(this.allCoords[0].left, this.allCoords[0].top);
         for (var i = 0; i < this.allCoords.length; i++) {
             ctx.lineTo(this.allCoords[i].left, this.allCoords[i].top);
@@ -146,6 +147,7 @@ class Polyline implements Shape {
 
         return this.shapeData;
     }
+    
     changeMinLeftSize(moveLeft: number) {
         const k = (this.shapeData.left + moveLeft - this.shapeData.leftStart) / (this.shapeData.left - this.shapeData.leftStart)
         //console.log(k)
