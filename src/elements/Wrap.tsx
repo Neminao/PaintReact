@@ -35,6 +35,25 @@ class Wrap extends React.Component<MyProps, MyState> {
             resizing: 'none'
         }
     }
+    handleKeyDown = (e: any) =>{
+        if(e.keyCode == 46){
+            if(this.state.selectedShape!=-1 && this.state.baseShape.includes("Move")){
+            this.deleteShape(this.state.selectedShape);
+            console.log(46);
+            }
+        }
+        console.log(1);
+    }
+    deleteShape = (index: number) => {
+        let arr = this.state.allShapes;
+        arr.splice(index, 1);
+        this.setState({
+            allShapes: arr,
+            selectedShape: -1
+        })
+        this.redrawCanvas();
+        console.log(2);
+    }
     getClickedObject = (coords: any) => {
         var tempshape: any
         this.state.allShapes.forEach(shape => {
@@ -141,7 +160,7 @@ class Wrap extends React.Component<MyProps, MyState> {
         const canvas: any = document.getElementById('myCanvas')
         const ctx: any = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
+
         this.state.allShapes.map(shape => {
             this.drawOnCanvas(shape.shapeData, ctx, false)
         })
@@ -367,6 +386,7 @@ class Wrap extends React.Component<MyProps, MyState> {
                         onMouseDown={this.onMouseDown}
                         onMouseUp={this.onMouseUp}
                         onMouseMove={this.onMouseMove}
+                        
                         id={'myCanvas'}
                         zindex={2}
 
@@ -375,6 +395,7 @@ class Wrap extends React.Component<MyProps, MyState> {
                         onMouseDown={this.onMouseDown}
                         onMouseUp={this.onMouseUp}
                         onMouseMove={this.onMouseMove}
+                        onKeyDown={this.handleKeyDown}
                         id={'myCanvas2'}
                         zindex={200}
                     />

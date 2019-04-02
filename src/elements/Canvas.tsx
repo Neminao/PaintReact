@@ -15,7 +15,10 @@ function Canvas(props: any) {
             height="800"
             onMouseDown={props.onMouseDown}
             onMouseUp={props.onMouseUp}
-            onMouseMove={props.onMouseMove}>
+            onMouseMove={props.onMouseMove}
+            onKeyDown={props.onKeyDown}
+            tabIndex={0}>
+            
         </canvas>
     )
 
