@@ -42,7 +42,7 @@ class Wrap extends React.Component<MyProps, MyState> {
                 this.deleteShape(this.state.selectedShape);
             }
             else if (this.state.baseShape.includes("MultiSelect") && this.state.selectedShapesArr != []) {
-                for (let i = this.state.selectedShapesArr.length-1; i >= 0; i--) {
+                for (let i = this.state.selectedShapesArr.length - 1; i >= 0; i--) {
                     this.deleteShape(this.state.selectedShapesArr[i]);
                     console.log(i)
                 }
@@ -326,16 +326,22 @@ class Wrap extends React.Component<MyProps, MyState> {
                 })
                 if (this.state.selectedShape != -1)
                     createShape(this.state.allShapes[this.state.selectedShape].shapeData).surroundWithBox(true, ctx)
-                //this.drawOnCanvas(shapeData, ctx, true)
-                // s.shapeName = 'SelectorBox';
-                // this.drawOnCanvas(s, ctx, true);
+
             }
 
         }
-        else if (this.state.clicked) {
+        else if (this.state.baseShape.includes('MultiSelect')) {
             const canvas: any = document.getElementById('myCanvas2')
             const ctx = canvas.getContext('2d')
-            this.drawOnCanvas(shapeData, ctx, true)
+            shapeData.shapeName = 'SelectorBox';
+            if (this.state.clicked) {
+                this.drawOnCanvas(shapeData, ctx, true)
+            }
+        }
+        else if (this.state.clicked) {
+            const canvas: any = document.getElementById('myCanvas2');
+            const ctx = canvas.getContext('2d');
+            this.drawOnCanvas(shapeData, ctx, true);
 
             // shapeData.shapeName = 'SelectorBox';
             // this.drawOnCanvas(shapeData, ctx, true)
