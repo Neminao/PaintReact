@@ -32,17 +32,22 @@ class Wrap extends React.Component<MyProps, MyState> {
             allColors: colorArr,
             allShapes: [],
             polyline: [],
-            resizing: 'none'
+            resizing: 'none',
+            selectedShapesArr: []
         }
     }
-    handleKeyDown = (e: any) =>{
-        if(e.keyCode == 46){
-            if(this.state.selectedShape!=-1 && this.state.baseShape.includes("Move")){
-            this.deleteShape(this.state.selectedShape);
-            console.log(46);
+    handleKeyDown = (e: any) => {
+        if (e.keyCode == 46) {
+            if (this.state.selectedShape != -1 && this.state.baseShape.includes("Move")) {
+                this.deleteShape(this.state.selectedShape);
+            }
+            else if (this.state.baseShape.includes("MultiSelect") && this.state.selectedShapesArr != []) {
+                for (let i = this.state.selectedShapesArr.length-1; i >= 0; i--) {
+                    this.deleteShape(this.state.selectedShapesArr[i]);
+                    console.log(i)
+                }
             }
         }
-        console.log(1);
     }
     deleteShape = (index: number) => {
         let arr = this.state.allShapes;
@@ -52,18 +57,17 @@ class Wrap extends React.Component<MyProps, MyState> {
             selectedShape: -1
         })
         this.redrawCanvas();
-        console.log(2);
     }
     getClickedObject = (coords: any) => {
-        var tempshape: any
+        var tempshape: any;
         this.state.allShapes.forEach(shape => {
             if (shape.isShapeSelected(coords)) {
-                tempshape = shape
-                console.log("found")
+                tempshape = shape;
             }
         })
-        return this.state.allShapes.indexOf(tempshape)
-
+        if (tempshape != undefined)
+            return this.state.allShapes.indexOf(tempshape)
+        return -1;
     }
     createShapeData = (coords: Coor): ShapeData => {
         return {
@@ -82,37 +86,37 @@ class Wrap extends React.Component<MyProps, MyState> {
 
     updateSelectedColor = (index: number) => {
         if (index >= 0) {
-            const shapes = this.state.allShapes
-            let shape = shapes[index]
-            shape.shapeData.color = this.state.baseColor
-            shapes[index] = shape
-            console.log(shape)
+            const shapes = this.state.allShapes;
+            let shape = shapes[index];
+            shape.shapeData.color = this.state.baseColor;
+            shapes[index] = shape;
+            console.log(shape);
             this.setState({
                 allShapes: shapes
             })
-            this.redrawCanvas()
+            this.redrawCanvas();
         }
     }
     resize(index: number, endCoor: Coor) {
         if (index >= 0) {
-            const shapes = this.state.allShapes
-            let shape = shapes[index]
-            const moveLeft = endCoor.left - this.state.startCoor.left
-            const moveTop = endCoor.top - this.state.startCoor.top
-            shape.resize(moveLeft, moveTop, this.state.resizing)
-            shapes[index] = shape
+            const shapes = this.state.allShapes;
+            let shape = shapes[index];
+            const moveLeft = endCoor.left - this.state.startCoor.left;
+            const moveTop = endCoor.top - this.state.startCoor.top;
+            shape.resize(moveLeft, moveTop, this.state.resizing);
+            shapes[index] = shape;
             this.setState({
                 allShapes: shapes
             })
-            this.redrawCanvas()
+            this.redrawCanvas();
         }
     }
     updateSelectedPosition = (index: number, endCoor: Coor) => {
         if (index >= 0) {
-            const shapes = this.state.allShapes
-            let shape = shapes[index]
-            const moveLeft = endCoor.left - this.state.startCoor.left
-            const moveTop = endCoor.top - this.state.startCoor.top
+            const shapes = this.state.allShapes;
+            let shape = shapes[index];
+            const moveLeft = endCoor.left - this.state.startCoor.left;
+            const moveTop = endCoor.top - this.state.startCoor.top;
             if (shape.shapeData.shapeName == "Pen") {
                 shape.shapeData.polyline.forEach(el => {
                     el.left += moveLeft;
@@ -120,17 +124,16 @@ class Wrap extends React.Component<MyProps, MyState> {
                 })
             }
             else {
-                shape.shapeData.leftStart += moveLeft
-                shape.shapeData.left += moveLeft
-                shape.shapeData.topStart += moveTop
-                shape.shapeData.top += moveTop
+                shape.shapeData.leftStart += moveLeft;
+                shape.shapeData.left += moveLeft;
+                shape.shapeData.topStart += moveTop;
+                shape.shapeData.top += moveTop;
             }
-            shapes[index] = shape
-            // console.log(shape)
+            shapes[index] = shape;
             this.setState({
                 allShapes: shapes
             })
-            this.redrawCanvas()
+            this.redrawCanvas();
         }
     }
     drawOnCanvas = (pro: ShapeData, ctx: any, clear: boolean) => {
@@ -150,6 +153,8 @@ class Wrap extends React.Component<MyProps, MyState> {
         this.setState({
             allShapes: temp
         })
+        const canvas: any = document.getElementById('myCanvas')
+        const ctx: any = canvas.getContext('2d');
         this.redrawCanvas()
     }
 
@@ -218,12 +223,24 @@ class Wrap extends React.Component<MyProps, MyState> {
         console.log(shape)
         const s = this.state.baseShape
         let arr = this.state.allShapes
-        if (!(s.includes('Move') || s.includes('FillColor'))) {
+        if (!(s.includes('Move') || s.includes('FillColor') || s.includes('MultiSelect'))) {
             this.updateShapeArray(shape);
             ctx2.clearRect(0, 0, 1800, 1000);
         }
+        else if (s.includes('MultiSelect') && arr != []) {
+            ctx2.clearRect(0, 0, 1800, 1000);
+            let indexArr = [];
+            for (let i = 0; i < arr.length; i++) {
+                if (arr[i].isShapeWithinSelector(this.state.startCoor, coord)) {
+                    arr[i].surroundWithBox(true, ctx2);
+                    indexArr.push(i);
+                }
+            }
+            this.setState({
+                selectedShapesArr: indexArr
+            })
+        }
         else {
-
             if (s.includes('Move') && this.state.selectedShape != -1)
                 createShape(this.state.allShapes[this.state.selectedShape].shapeData).surroundWithBox(true, ctx2)
         }
@@ -351,21 +368,21 @@ class Wrap extends React.Component<MyProps, MyState> {
     }
 
     mySliderChange = (e: any) => {
-        let { value, max } = e.target
+        let { value, max } = e.target;
         max == 1000 ?
             this.setState({
                 range: value
             }) :
             this.setState({
                 lineWidth: value
-            })
+            });
     }
     setShape = (e: any) => {
-        const { value } = e.target
+        const { value } = e.target;
         this.setState({
             baseShape: value,
             selectedShape: -1
-        })
+        });
     }
     render() {
         const colorButtons = this.state.allColors.map((c) => {
@@ -386,7 +403,7 @@ class Wrap extends React.Component<MyProps, MyState> {
                         onMouseDown={this.onMouseDown}
                         onMouseUp={this.onMouseUp}
                         onMouseMove={this.onMouseMove}
-                        
+
                         id={'myCanvas'}
                         zindex={2}
 

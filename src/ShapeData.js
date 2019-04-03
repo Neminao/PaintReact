@@ -9,5 +9,6 @@ const shapeArr =
         "FilledCustomRect",
         "Text",
         "FillColor",
-        "Move"]
+        "Move",
+        "MultiSelect"]
 export default shapeArr

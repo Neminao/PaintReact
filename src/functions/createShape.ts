@@ -31,7 +31,8 @@ function createShape(shapeData: ShapeData): Shape {
         'FilledCustomRect': new RectCustomFilled(shapeData),
         'Text': new Text(shapeData),
         'Pen': new Line(shapeData),
-        'SelectorBox': new SelectorBox(shapeData)
+        'SelectorBox': new SelectorBox(shapeData),
+        
 
     }
 

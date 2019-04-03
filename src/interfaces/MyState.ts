@@ -14,7 +14,7 @@ interface MyState {
     allShapes: Shape[],
     resizing: string,
     polyline: Coor[],
-    
+    selectedShapesArr: number[]
 
 }
 

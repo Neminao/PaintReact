@@ -36,7 +36,7 @@ class Circle implements Shape {
         
             let data = Object.assign({}, this.shapeData);
             console.log(data)
-            ctx.clearRect(0,0, 1800, 800);
+            //ctx.clearRect(0,0, 1800, 800);
             data.lineWidth = 2;
             data.shapeName = "SelectorBox"
             data.leftStart = data.left -1 - data.range/2;
@@ -102,6 +102,13 @@ class Circle implements Shape {
             this.shapeData.range = Math.abs(this.shapeData.range - moveLeft);
         }
         return this.shapeData;
+    }
+    isShapeWithinSelector(startCoor: Coor, endCoor: Coor) {
+        const data = this.shapeData;
+        return Math.min(startCoor.left, endCoor.left) < Math.min(data.left, data.leftStart) &&
+        Math.min(startCoor.top, endCoor.top) < Math.min(data.top, data.topStart) &&
+        Math.max(startCoor.left, endCoor.left) > Math.max(data.left, data.leftStart) &&
+        Math.max(startCoor.top, endCoor.top) > Math.max(data.top, data.topStart) 
     }
 }
 

@@ -4,7 +4,7 @@ import ShapeData from '../interfaces/ShapeData';
 import SelectorBox from './SelectorBox';
 class Text implements Shape {
     shapeData: ShapeData
-    
+
     constructor(pro: any) {
         this.shapeData = pro
     }
@@ -22,29 +22,36 @@ class Text implements Shape {
             && Math.max(this.shapeData.left, this.shapeData.leftStart) >= coords.left
             && Math.min(this.shapeData.top, this.shapeData.topStart) <= coords.top
             && Math.max(this.shapeData.top, this.shapeData.topStart) >= coords.top
-      //  return Math.abs(this.shapeData.left - coords.left) < 10 && Math.abs(this.shapeData.top - coords.top) < 10 
+        //  return Math.abs(this.shapeData.left - coords.left) < 10 && Math.abs(this.shapeData.top - coords.top) < 10 
     }
-    surroundWithBox(bool: boolean, ctx: any){     
-        
+    surroundWithBox(bool: boolean, ctx: any) {
+
         let data = this.shapeData;
-        
-        const box= new SelectorBox(data);
-     box.updateCanvas(ctx);
-    return box
-}  
-isSideEdgeClicked(coords: Coor){
-    const data = this.shapeData
-    let b = 'none';
-    if (
-        Math.abs(((Math.max(data.top, data.topStart) - Math.min(data.top, data.topStart)) / 2) - coords.top) < 10 &&
-        (Math.abs(Math.min(data.left, data.leftStart) - coords.left) < 10 || Math.abs(Math.max(data.left, data.leftStart) - coords.left) < 10)
-    ) b = 'left';
-    return b;
-}
-resize(moveLeft: number, moveTop: number, position: string){
-    
-    return this.shapeData;
-}
+
+        const box = new SelectorBox(data);
+        box.updateCanvas(ctx);
+        return box
+    }
+    isSideEdgeClicked(coords: Coor) {
+        const data = this.shapeData
+        let b = 'none';
+        if (
+            Math.abs(((Math.max(data.top, data.topStart) - Math.min(data.top, data.topStart)) / 2) - coords.top) < 10 &&
+            (Math.abs(Math.min(data.left, data.leftStart) - coords.left) < 10 || Math.abs(Math.max(data.left, data.leftStart) - coords.left) < 10)
+        ) b = 'left';
+        return b;
+    }
+    resize(moveLeft: number, moveTop: number, position: string) {
+
+        return this.shapeData;
+    }
+    isShapeWithinSelector(startCoor: Coor, endCoor: Coor) {
+        const data = this.shapeData;
+        return Math.min(startCoor.left, endCoor.left) < Math.min(data.left, data.leftStart) &&
+            Math.min(startCoor.top, endCoor.top) < Math.min(data.top, data.topStart) &&
+            Math.max(startCoor.left, endCoor.left) > Math.max(data.left, data.leftStart) &&
+            Math.max(startCoor.top, endCoor.top) > Math.max(data.top, data.topStart)
+    }
 }
 
 export default Text

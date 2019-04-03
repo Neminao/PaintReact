@@ -9,6 +9,7 @@ interface Shape {
     surroundWithBox(bool: boolean, ctx: any): SelectorBox;
     isSideEdgeClicked(coords: Coor): any;
     resize(left: number, right: number, position: string): ShapeData;
+    isShapeWithinSelector(startCoor: Coor, endCoor: Coor): boolean;
 }
 
 export default Shape

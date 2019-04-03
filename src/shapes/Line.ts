@@ -33,7 +33,7 @@ class Line implements Shape {
 
         let data = Object.assign({}, this.shapeData);
         console.log(data)
-        ctx.clearRect(0, 0, 1800, 800);
+      //  ctx.clearRect(0, 0, 1800, 800);
         data.lineWidth = 2;
         data.shapeName = "SelectorBox"
       /*  data.leftStart += 1;
@@ -135,6 +135,13 @@ class Line implements Shape {
             this.shapeData.topStart = Math.abs(this.shapeData.topStart + moveTop);
         }
         else this.shapeData.top = Math.abs(this.shapeData.top + moveTop);
+    }
+    isShapeWithinSelector(startCoor: Coor, endCoor: Coor) {
+        const data = this.shapeData;
+        return Math.min(startCoor.left, endCoor.left) < Math.min(data.left, data.leftStart) &&
+        Math.min(startCoor.top, endCoor.top) < Math.min(data.top, data.topStart) &&
+        Math.max(startCoor.left, endCoor.left) > Math.max(data.left, data.leftStart) &&
+        Math.max(startCoor.top, endCoor.top) > Math.max(data.top, data.topStart) 
     }
 }
 
