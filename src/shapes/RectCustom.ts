@@ -33,7 +33,7 @@ class RectCustom implements Shape {
 
         let data = Object.assign({}, this.shapeData);
         console.log(data)
-       // ctx.clearRect(0, 0, 1800, 800);
+        // ctx.clearRect(0, 0, 1800, 800);
         data.lineWidth = 2;
         data.shapeName = "SelectorBox"
         const box = new SelectorBox(data);
@@ -134,10 +134,33 @@ class RectCustom implements Shape {
     }
     isShapeWithinSelector(startCoor: Coor, endCoor: Coor) {
         const data = this.shapeData;
-        return Math.min(startCoor.left, endCoor.left) < Math.min(data.left, data.leftStart) &&
-        Math.min(startCoor.top, endCoor.top) < Math.min(data.top, data.topStart) &&
-        Math.max(startCoor.left, endCoor.left) > Math.max(data.left, data.leftStart) &&
-        Math.max(startCoor.top, endCoor.top) > Math.max(data.top, data.topStart) 
+        /*  return (Math.min(startCoor.left, endCoor.left) < Math.min(data.left, data.leftStart) &&
+              Math.min(startCoor.top, endCoor.top) < Math.min(data.top, data.topStart) &&
+              Math.max(startCoor.left, endCoor.left) > Math.max(data.left, data.leftStart) &&
+              Math.max(startCoor.top, endCoor.top) > Math.max(data.top, data.topStart)) ||
+              (
+                  ((startCoor.left > Math.min(data.left, data.leftStart) && startCoor.left < Math.max(data.left, data.leftStart)) ||
+                      (endCoor.left > Math.min(data.left, data.leftStart) && endCoor.left < Math.max(data.left, data.leftStart))) &&
+                  ((startCoor.top > Math.min(data.top, data.topStart) && startCoor.top < Math.max(data.top, data.topStart)) ||
+                      (endCoor.top > Math.min(data.top, data.topStart) && endCoor.top < Math.max(data.top, data.topStart)))
+              )
+              ||
+              (
+                  ((startCoor.top > Math.min(data.top, data.topStart) && startCoor.top < Math.max(data.top, data.topStart)) ||
+                  (endCoor.top > Math.min(data.top, data.topStart) && endCoor.top < Math.max(data.top, data.topStart))) &&
+                  (Math.min(startCoor.left, endCoor.left) < Math.min(data.left, data.leftStart) && Math.max(startCoor.left, endCoor.left) > Math.max(data.left, data.leftStart))
+              ) ||
+              (
+                  ((startCoor.left > Math.min(data.left, data.leftStart) && startCoor.left < Math.max(data.left, data.leftStart)) ||
+                  (endCoor.left > Math.min(data.left, data.leftStart) && endCoor.left < Math.max(data.left, data.leftStart))) &&
+                  (Math.min(startCoor.top, endCoor.top) < Math.min(data.top, data.topStart) && Math.max(startCoor.top, endCoor.top) > Math.max(data.top, data.topStart))
+              )*/
+        const rangeLeft = Math.max(data.left, data.leftStart) - Math.min(data.left, data.leftStart)
+        const rangeTop = Math.max(data.top, data.topStart) - Math.min(data.top, data.topStart)
+        return Math.min(startCoor.left, endCoor.left) - rangeLeft / 2 < Math.min(data.left, data.leftStart) + rangeLeft / 2 &&
+            Math.min(startCoor.top, endCoor.top) - rangeTop / 2 < Math.min(data.top, data.topStart) + rangeTop / 2 &&
+            Math.max(startCoor.left, endCoor.left) + rangeLeft / 2 > Math.max(data.left, data.leftStart) - rangeLeft / 2 &&
+            Math.max(startCoor.top, endCoor.top) + rangeTop / 2 > Math.max(data.top, data.topStart) - rangeTop / 2
     }
 }
 export default RectCustom

@@ -96,10 +96,10 @@ class Rect implements Shape {
     }
     isShapeWithinSelector(startCoor: Coor, endCoor: Coor) {
         const data = this.shapeData;
-        return Math.min(startCoor.left, endCoor.left) < Math.min(data.left, data.leftStart) &&
-        Math.min(startCoor.top, endCoor.top) < Math.min(data.top, data.topStart) &&
-        Math.max(startCoor.left, endCoor.left) > Math.max(data.left, data.leftStart) &&
-        Math.max(startCoor.top, endCoor.top) > Math.max(data.top, data.topStart) 
+        return Math.min(startCoor.left, endCoor.left) - data.range/2 < data.left &&
+        Math.min(startCoor.top, endCoor.top) - data.range/2 < data.top &&
+        Math.max(startCoor.left, endCoor.left) + data.range/2 > data.left &&
+        Math.max(startCoor.top, endCoor.top) + data.range/2 > data.top
     }
 }
 export default Rect

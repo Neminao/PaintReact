@@ -108,6 +108,9 @@ code {
 .Move { 
   background-image: url("./img/Actions-transform-move-icon.png");
 }
+.MultiSelect { 
+  background-image: url("./img/Cursor-Select-icon.png");
+}
 
 .container:hover input ~ .checkmark {
   background-color: #ccc;

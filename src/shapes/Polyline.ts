@@ -48,13 +48,21 @@ class Polyline implements Shape {
         return isSelected;
     }
     surroundWithBox(bool: boolean, ctx: any) {
-        for (var i = 0; i < this.allCoords.length; i++) {
-            if (this.allCoords[i].left < this.minLeft) { this.minLeft = this.allCoords[i].left; }
-            if (this.allCoords[i].left > this.maxLeft) { this.maxLeft = this.allCoords[i].left; }
-            if (this.allCoords[i].top < this.minTop) { this.minTop = this.allCoords[i].top; }
-            if (this.allCoords[i].top > this.maxTop) { this.maxTop = this.allCoords[i].top; }
-        }
         let data = this.shapeData;
+        let minLeft = this.allCoords[0].left;
+        let maxLeft = this.allCoords[0].left;
+        let minTop = this.allCoords[0].top;
+        let maxTop = this.allCoords[0].top;
+        for (var i = 0; i < this.allCoords.length; i++) {
+            if (this.allCoords[i].left < minLeft) { minLeft = this.allCoords[i].left; }
+            if (this.allCoords[i].left > maxLeft) { maxLeft = this.allCoords[i].left; }
+            if (this.allCoords[i].top < minTop) { minTop = this.allCoords[i].top; }
+            if (this.allCoords[i].top > maxTop) { maxTop = this.allCoords[i].top; }
+        }
+        this.minLeft = minLeft;
+        this.minTop = minTop;
+        this.maxLeft = maxLeft;
+        this.maxTop = maxTop;
         data.leftStart = this.minLeft;
         data.topStart = this.minTop;
         data.left = this.maxLeft;
@@ -189,11 +197,40 @@ class Polyline implements Shape {
         }
     }
     isShapeWithinSelector(startCoor: Coor, endCoor: Coor) {
-        const data = this.shapeData;
-        return Math.min(startCoor.left, endCoor.left) < Math.min(data.left, data.leftStart) &&
-        Math.min(startCoor.top, endCoor.top) < Math.min(data.top, data.topStart) &&
-        Math.max(startCoor.left, endCoor.left) > Math.max(data.left, data.leftStart) &&
-        Math.max(startCoor.top, endCoor.top) > Math.max(data.top, data.topStart) 
+       let data = this.shapeData;
+        let minLeft = this.allCoords[0].left;
+        let maxLeft = this.allCoords[0].left;
+        let minTop = this.allCoords[0].top;
+        let maxTop = this.allCoords[0].top;
+        for (var i = 0; i < this.allCoords.length; i++) {
+            if (this.allCoords[i].left < minLeft) { minLeft = this.allCoords[i].left; }
+            if (this.allCoords[i].left > maxLeft) { maxLeft = this.allCoords[i].left; }
+            if (this.allCoords[i].top < minTop) { minTop = this.allCoords[i].top; }
+            if (this.allCoords[i].top > maxTop) { maxTop = this.allCoords[i].top; }
+        }
+        this.minLeft = minLeft;
+        this.minTop = minTop;
+        this.maxLeft = maxLeft;
+        this.maxTop = maxTop;
+        data.leftStart = this.minLeft;
+        data.topStart = this.minTop;
+        data.left = this.maxLeft;
+        data.top = this.maxTop;
+       /* const rangeLeft = Math.max(data.left, data.leftStart) - Math.min(data.left, data.leftStart)
+        const rangeTop = Math.max(data.top, data.topStart) - Math.min(data.top, data.topStart)
+      /*  return Math.min(startCoor.left, endCoor.left) - rangeLeft / 2 < Math.min(data.left, data.leftStart) + rangeLeft / 2 &&
+            Math.min(startCoor.top, endCoor.top) - rangeTop / 2 < Math.min(data.top, data.topStart) + rangeTop / 2 &&
+            Math.max(startCoor.left, endCoor.left) + rangeLeft / 2 > Math.max(data.left, data.leftStart) - rangeLeft / 2 &&
+            Math.max(startCoor.top, endCoor.top) + rangeTop / 2 > Math.max(data.top, data.topStart) - rangeTop / 2
+        */
+            for (var i = Math.min(startCoor.left, endCoor.left); i <= Math.max(startCoor.left, endCoor.left); i++) {
+                for (var j = Math.min(startCoor.top, endCoor.top); j <= Math.max(startCoor.top, endCoor.top); j++) {
+                    if (this.isShapeSelected({ left: i, top: j })) {
+                        return true;
+                    }
+                }
+            }
+            return false
     }
 }
 

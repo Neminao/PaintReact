@@ -33,13 +33,13 @@ class Line implements Shape {
 
         let data = Object.assign({}, this.shapeData);
         console.log(data)
-      //  ctx.clearRect(0, 0, 1800, 800);
+        //  ctx.clearRect(0, 0, 1800, 800);
         data.lineWidth = 2;
         data.shapeName = "SelectorBox"
-      /*  data.leftStart += 1;
-        data.topStart += 1;
-        data.left += 1;
-        data.top += 1;*/
+        /*  data.leftStart += 1;
+          data.topStart += 1;
+          data.left += 1;
+          data.top += 1;*/
         const box = new SelectorBox(data);
         box.updateCanvas(ctx);
         return box;
@@ -69,18 +69,18 @@ class Line implements Shape {
             }
         }
         else if (Math.abs(minl - coords.left) < 10) {
-            if(Math.abs(mint - coords.top) < 10){
+            if (Math.abs(mint - coords.top) < 10) {
                 b = 'tl';
             }
-            else if(Math.abs(maxt - coords.top) < 10) {
+            else if (Math.abs(maxt - coords.top) < 10) {
                 b = 'bl';
             }
         }
         else if (Math.abs(maxl - coords.left) < 10) {
-            if(Math.abs(mint - coords.top) < 10){
+            if (Math.abs(mint - coords.top) < 10) {
                 b = 'tr';
             }
-            else if(Math.abs(maxt - coords.top) < 10) {
+            else if (Math.abs(maxt - coords.top) < 10) {
                 b = 'br';
             }
         }
@@ -137,11 +137,21 @@ class Line implements Shape {
         else this.shapeData.top = Math.abs(this.shapeData.top + moveTop);
     }
     isShapeWithinSelector(startCoor: Coor, endCoor: Coor) {
-        const data = this.shapeData;
-        return Math.min(startCoor.left, endCoor.left) < Math.min(data.left, data.leftStart) &&
-        Math.min(startCoor.top, endCoor.top) < Math.min(data.top, data.topStart) &&
-        Math.max(startCoor.left, endCoor.left) > Math.max(data.left, data.leftStart) &&
-        Math.max(startCoor.top, endCoor.top) > Math.max(data.top, data.topStart) 
+        /*const data = this.shapeData;
+        const rangeLeft = Math.max(data.left, data.leftStart) - Math.min(data.left, data.leftStart)
+        const rangeTop = Math.max(data.top, data.topStart) - Math.min(data.top, data.topStart)
+        return Math.min(startCoor.left, endCoor.left) - rangeLeft / 2 < Math.min(data.left, data.leftStart) + rangeLeft / 2 &&
+            Math.min(startCoor.top, endCoor.top) - rangeTop / 2 < Math.min(data.top, data.topStart) + rangeTop / 2 &&
+            Math.max(startCoor.left, endCoor.left) + rangeLeft / 2 > Math.max(data.left, data.leftStart) - rangeLeft / 2 &&
+            Math.max(startCoor.top, endCoor.top) + rangeTop / 2 > Math.max(data.top, data.topStart) - rangeTop / 2*/
+        for (var i = Math.min(startCoor.left, endCoor.left); i <= Math.max(startCoor.left, endCoor.left); i++) {
+            for (var j = Math.min(startCoor.top, endCoor.top); j <= Math.max(startCoor.top, endCoor.top); j++) {
+                if (this.isShapeSelected({ left: i, top: j })) {
+                    return true;
+                }
+            }
+        }
+        return false
     }
 }
 

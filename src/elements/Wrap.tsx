@@ -38,23 +38,25 @@ class Wrap extends React.Component<MyProps, MyState> {
     }
     handleKeyDown = (e: any) => {
         if (e.keyCode == 46) {
-            if (this.state.selectedShape != -1 && this.state.baseShape.includes("Move")) {
+           /* if (this.state.baseShape.includes("Move") || this.state.baseShape.includes("Move")) {
                 this.deleteShape(this.state.selectedShape);
             }
-            else if (this.state.baseShape.includes("MultiSelect") && this.state.selectedShapesArr != []) {
+            else */if ((this.state.baseShape.includes("MultiSelect") || this.state.baseShape.includes("Move")) && this.state.selectedShapesArr != []) {
                 for (let i = this.state.selectedShapesArr.length - 1; i >= 0; i--) {
                     this.deleteShape(this.state.selectedShapesArr[i]);
-                    console.log(i)
+                    //console.log(i)
                 }
             }
+            this.setState({
+                selectedShapesArr: []
+            })
         }
     }
     deleteShape = (index: number) => {
         let arr = this.state.allShapes;
         arr.splice(index, 1);
         this.setState({
-            allShapes: arr,
-            selectedShape: -1
+            allShapes: arr
         })
         this.redrawCanvas();
     }
@@ -184,22 +186,34 @@ class Wrap extends React.Component<MyProps, MyState> {
             this.updateSelectedColor(clickedShape)
         }
         else if (this.state.baseShape == 'Move') {
+            let i = -1;
             let side = 'none';
-            if (this.state.selectedShape != -1) {
-                side = this.state.allShapes[this.state.selectedShape].isSideEdgeClicked(coord);
-            }
-            if (side == 'none') {
-                this.setState({
-                    selectedShape: clickedShape,
-                    resizing: side
-                })
-            }
-            else {
-                this.setState({
+            let pom = false;
 
-                    resizing: side
-                })
+            /*  if (this.state.selectedShape != -1) {
+                  side = this.state.allShapes[this.state.selectedShape].isSideEdgeClicked(coord);
+              }*/
+            this.state.selectedShapesArr.forEach(index => {
+                if (this.state.allShapes[index].isShapeSelected(coord) || this.state.allShapes[index].isSideEdgeClicked(coord) != 'none') {
+                    i = index
+                    pom = true;
+                }
+            })
+            if (pom) {
+                side = this.state.allShapes[i].isSideEdgeClicked(coord);
             }
+            //    if (side == 'none') {
+            this.setState({
+                selectedShape: i,
+                resizing: side
+            })
+            //  }
+            /*  else {
+                  this.setState({
+  
+                      resizing: side
+                  })
+              }*/
         }
         else if (this.state.baseShape == 'Pen') {
             let lineArr = this.state.polyline;
@@ -241,10 +255,13 @@ class Wrap extends React.Component<MyProps, MyState> {
             })
         }
         else {
-            if (s.includes('Move') && this.state.selectedShape != -1)
-                createShape(this.state.allShapes[this.state.selectedShape].shapeData).surroundWithBox(true, ctx2)
+            if (s.includes('Move')) { //&& this.state.selectedShape != -1
+                this.state.selectedShapesArr.forEach(index => {
+                    this.state.allShapes[index].surroundWithBox(true, ctx2)
+                })
+            }
         }
-        console.log(this.state.allShapes)
+        //console.log(this.state.allShapes)
         this.drawOnCanvas(shapeData, ctx, false);
         this.setState({
             clicked: false,
@@ -280,22 +297,27 @@ class Wrap extends React.Component<MyProps, MyState> {
         else if (this.state.baseShape == "Move") {
             var pom = false;
             var side = false;
-            const canvas: any = document.getElementById('myCanvas2')
-            const ctx = canvas.getContext('2d')
-            let position = 'none'
-            this.state.allShapes.forEach(shape => {
-                if (shape != undefined) {
-                    if (shape.isShapeSelected(coord)) {
+            const canvas: any = document.getElementById('myCanvas2');
+            const ctx = canvas.getContext('2d');
+            let position = 'none';
+            this.state.selectedShapesArr.forEach(index => {
+                if (index != -1) {
+                    if (this.state.allShapes[index].isShapeSelected(coord)) {
                         pom = true;
                     }
-                }
-                if (this.state.selectedShape != -1) {
-                    position = this.state.allShapes[this.state.selectedShape].isSideEdgeClicked(coord);
+                    position = this.state.allShapes[index].isSideEdgeClicked(coord);
                     if (position != 'none') {
                         side = true;
                     }
                 }
-                if (side && this.state.selectedShape != -1) {
+                /*   if (this.state.selectedShape != -1) {
+                       position = this.state.allShapes[this.state.selectedShape].isSideEdgeClicked(coord);
+                       if (position != 'none') {
+                           side = true;
+                       }
+                   }*/
+
+                if (side) {
                     switch (position) {
                         case 'left': canvas.style.cursor = 'ew-resize'; break;
                         case 'right': canvas.style.cursor = 'ew-resize'; break
@@ -314,18 +336,29 @@ class Wrap extends React.Component<MyProps, MyState> {
                 else canvas.style.cursor = 'auto';
             })
             if (this.state.clicked) {
-
+                console.log(this.state.resizing)
+                console.log(this.state.selectedShape)
                 if (this.state.resizing != 'none') {
-                    this.resize(this.state.selectedShape, coord);
+                    //this.resize(this.state.selectedShape, coord);
+                    this.state.selectedShapesArr.forEach(index => {
+                        this.resize(index, coord)
+                    })
                 }
-                else {
-                    this.updateSelectedPosition(this.state.selectedShape, coord)
+                else if (this.state.selectedShapesArr != []) {
+                    this.state.selectedShapesArr.forEach(index => {
+                        if (this.state.selectedShape != -1)
+                            this.updateSelectedPosition(index, coord)
+                    })
                 }
+                /*   else if (this.state.selectedShape != -1){
+                       this.updateSelectedPosition(this.state.selectedShape, coord)
+                   }*/
+
                 this.setState({
                     startCoor: coord
                 })
-                if (this.state.selectedShape != -1)
-                    createShape(this.state.allShapes[this.state.selectedShape].shapeData).surroundWithBox(true, ctx)
+                /*  if (this.state.selectedShape != -1)
+                      createShape(this.state.allShapes[this.state.selectedShape].shapeData).surroundWithBox(true, ctx)*/
 
             }
 
@@ -334,6 +367,15 @@ class Wrap extends React.Component<MyProps, MyState> {
             const canvas: any = document.getElementById('myCanvas2')
             const ctx = canvas.getContext('2d')
             shapeData.shapeName = 'SelectorBox';
+            let pom = false;
+            this.state.selectedShapesArr.forEach(index => {
+                if (index != -1) {
+                    if (this.state.allShapes[index].isShapeSelected(coord)) {
+                        pom = true;
+                    }
+                }
+            })
+
             if (this.state.clicked) {
                 this.drawOnCanvas(shapeData, ctx, true)
             }
@@ -385,9 +427,14 @@ class Wrap extends React.Component<MyProps, MyState> {
     }
     setShape = (e: any) => {
         const { value } = e.target;
+        let arr: number[] = [];
+        if (value.includes('Move')) {
+            arr = this.state.selectedShapesArr;
+        }
         this.setState({
             baseShape: value,
-            selectedShape: -1
+            //  selectedShape: -1,
+            selectedShapesArr: arr
         });
     }
     render() {
